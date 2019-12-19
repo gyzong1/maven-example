@@ -14,7 +14,6 @@ jobs:
       - run:
           name: Config
           command: |
-            export M2_HOME=/usr/share/maven
             mvn -version
             
       - run:
