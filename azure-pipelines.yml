@@ -1,22 +1,65 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- master
+- master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-16.04'
 
 steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+- task: Bash@3
+  displayName: 'Delete plexus-classworlds.license'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd $M2_HOME/boot
+      ls -la
+      rm ./plexus-classworlds.license
+- task: ArtifactoryMaven@1
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    artifactoryResolverService: 'art'
+    targetResolveReleaseRepo: 'guide-maven-virtual'
+    targetResolveSnapshotRepo: 'guide-maven-virtual'
+    artifactoryDeployService: 'art'
+    targetDeployReleaseRepo: 'guide-maven-dev-local'
+    targetDeploySnapshotRepo: 'guide-maven-dev-local'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    includeEnvVars: true
+- task: ArtifactoryPublishBuildInfo@1
+  inputs:
+    artifactoryService: 'art'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+- task: ArtifactoryBuildPromotion@1
+  inputs:
+    artifactoryService: 'art'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    targetRepo: 'guide-maven-pro-local'
+    status: 'Released'
+    sourceRepo: 'guide-maven-dev-local'
+    includeDependencies: true
+    copy: true
+    dryRun: false
+- task: ArtifactoryProperties@1
+  inputs:
+    command: 'set'
+    artifactoryService: 'art'
+    setProps: 'test.platforms=ubuntu-16.04,x86_64;'
+    specSource: 'taskConfiguration'
+    fileSpec: |
+      {
+        "files": [
+          {
+            "build": "$(Build.DefinitionName)/$(Build.BuildNumber)"
+          }
+        ]
+      }
+- task: ArtifactoryXrayScan@1
+  inputs:
+    artifactoryService: 'art'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    allowFailBuild: false
