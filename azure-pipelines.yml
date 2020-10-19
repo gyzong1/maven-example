@@ -14,9 +14,9 @@ steps:
 - task: ArtifactoryToolsInstaller@1
   inputs:
     artifactoryService: 'art1'
-    cliInstallationRepo: 'jfrog-cli'
+    cliInstallationRepo: 'jfrog-cli1'
     installExtractors: true
-    extractorsInstallationRepo: 'maven-remote'
+    extractorsInstallationRepo: 'maven-dev-local1'
 
 - task: ArtifactoryMaven@1
   inputs:
