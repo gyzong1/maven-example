@@ -12,7 +12,7 @@ pool:
 steps:
 - task: ArtifactoryMaven@1
   inputs:
-    mavenPomFile: 'maven-example/pom.xml'
+    mavenPomFile: 'pom.xml'
     goals: 'clean install'
     artifactoryResolverService: 'art1'
     targetResolveReleaseRepo: 'maven-virtual'
