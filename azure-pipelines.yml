@@ -1,7 +1,3 @@
-trigger:
-- master
-
-steps:
 - task: ArtifactoryMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
