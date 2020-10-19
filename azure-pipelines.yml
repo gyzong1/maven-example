@@ -1,4 +1,4 @@
-- task: ArtifactoryMaven@2
+- task: ArtifactoryMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean install'
