@@ -20,3 +20,12 @@ steps:
     artifactoryDeployService: 'art1'
     targetDeployReleaseRepo: 'maven-dev-local'
     targetDeploySnapshotRepo: 'maven-dev-local'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    includeEnvVars: true
+- task: ArtifactoryPublishBuildInfo@1
+  inputs:
+    artifactoryService: 'art1'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
