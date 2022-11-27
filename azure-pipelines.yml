@@ -24,3 +24,9 @@ steps:
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
     includeEnvVars: true
+
+- task: JFrogPublishBuildInfo@1
+  inputs:
+    artifactoryConnection: 'JFrog Artifactory V2'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
