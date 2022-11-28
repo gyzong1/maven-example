@@ -11,33 +11,11 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: JFrogMaven@1
+- task: CmdLine@2
   inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'install'
-    artifactoryResolverService: 'JFrog Artifactory V2'
-    targetResolveReleaseRepo: 'maven-virtual'
-    targetResolveSnapshotRepo: 'maven-virtual'
-    artifactoryDeployService: 'JFrog Artifactory V2'
-    targetDeployReleaseRepo: 'maven-dev-local'
-    targetDeploySnapshotRepo: 'maven-dev-local'
-    collectBuildInfo: true
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-    includeEnvVars: true
-
-- task: JFrogCollectIssues@1
-  inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
-    configSource: 'file'
-    file: 'jira-issue-new.conf'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-
-- task: JFrogPublishBuildInfo@1
-  inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-
-
+    script: |
+      curl -fL https://getcli.jfrog.io | sh
+      
+      ./jf c add "art1" --artifactory-url="http://1.117.196.4:8082/artifactory" --interactive=false --user='admin' --password=Password_123 --basic-auth-only
+      
+      ./jf config show
