@@ -14,7 +14,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      curl -fL https://getcli.jfrog.io | sh
+      curl -O https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/2.25.5/jfrog-cli-linux-amd64/jf
       
       ./jf c add "art1" --artifactory-url="http://1.117.196.4:8082/artifactory" --interactive=false --user='admin' --password=Password_123 --basic-auth-only
       
