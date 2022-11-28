@@ -21,3 +21,4 @@ steps:
       ./jf c add "art1" --artifactory-url="http://1.117.196.4:8082/artifactory" --interactive=false --user='admin' --password=Password_123 --basic-auth-only
       
       ./jf config show
+      
