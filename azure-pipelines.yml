@@ -29,17 +29,8 @@ steps:
 - task: JFrogCollectIssues@1
   inputs:
     artifactoryConnection: 'JFrog Artifactory V2'
-    configSource: 'taskConfiguration'
-    taskConfig: |
-      version: 1
-      issues:
-          trackerName: JIRA
-          regexp: (.+-[0-9]+)\s-\s(.+) 
-          keyGroupIndex: 1
-          summaryGroupIndex: 2
-          trackerUrl: http://abc.com
-          aggregate: true
-          aggregationStatus: RELEASED
+    configSource: 'file'
+    file: 'jira-issue-new.conf'
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
 
