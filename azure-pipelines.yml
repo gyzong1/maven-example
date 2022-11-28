@@ -17,7 +17,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      wget https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/2.25.0/jfrog-cli-linux-amd64/jf
+      wget https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/2.25.5/jfrog-cli-linux-amd64/jf
       
       chmod 777 ./jf
       
