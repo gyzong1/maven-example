@@ -28,4 +28,4 @@ steps:
       
       ./jf rt bag "gyzong1.maven-example" "1" --config=jira-cli-new.conf --server-id="art1"
 
-      jf rt bp "gyzong1.maven-example" "1" --env-exclude="*password*;*psw*;*secret*;*key*;*token*;*auth*;" --build-url="https://gyzong1.visualstudio.com/maven-example-new/_build?buildId=74" --server-id="art1"
+      ./jf rt bp "gyzong1.maven-example" "1" --env-exclude="*password*;*psw*;*secret*;*key*;*token*;*auth*;" --build-url="https://gyzong1.visualstudio.com/maven-example-new/_build?buildId=74" --server-id="art1"
