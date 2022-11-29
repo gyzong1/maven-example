@@ -11,6 +11,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- task: CmdLine@2
+  inputs:
+    script: 'export JFROG_CLI_LOG_LEVEL="DEBUG'
+
 - task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
