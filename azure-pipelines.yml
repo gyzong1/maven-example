@@ -13,7 +13,7 @@ pool:
 steps:
 - task: CmdLine@2
   inputs:
-    script: 'export JFROG_CLI_LOG_LEVEL="DEBUG'
+    script: 'export JFROG_CLI_LOG_LEVEL="DEBUG"'
 
 - task: JFrogMaven@1
   inputs:
