@@ -13,7 +13,9 @@ pool:
 steps:
 - task: CmdLine@2
   inputs:
-    script: 'export JFROG_CLI_LOG_LEVEL="DEBUG"'
+    script: |
+      export JFROG_CLI_LOG_LEVEL="DEBUG"
+      git branch -vv
 
 - task: JFrogMaven@1
   inputs:
