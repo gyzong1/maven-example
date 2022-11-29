@@ -3,38 +3,52 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
+
 trigger:
-- master
+- none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
-
-- task: ArtifactoryToolsInstaller@1
+- task: CmdLine@2
   inputs:
-    artifactoryService: 'art1'
-    cliInstallationRepo: 'jfrog-cli1'
-    installExtractors: true
-    extractorsInstallationRepo: 'maven-dev-local1'
+    script: 'export JFROG_CLI_LOG_LEVEL="DEBUG"'
 
-- task: ArtifactoryMaven@1
+- task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean install'
-    artifactoryResolverService: 'art1'
+    artifactoryResolverService: 'JFrog Artifactory V2'
     targetResolveReleaseRepo: 'maven-virtual'
     targetResolveSnapshotRepo: 'maven-virtual'
-    artifactoryDeployService: 'art1'
+    artifactoryDeployService: 'JFrog Artifactory V2'
     targetDeployReleaseRepo: 'maven-dev-local'
     targetDeploySnapshotRepo: 'maven-dev-local'
     collectBuildInfo: true
-    includeEnvVars: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
-    
-- task: ArtifactoryPublishBuildInfo@1
+    includeEnvVars: true
+
+- task: JFrogCollectIssues@1
   inputs:
-    artifactoryService: 'art1'
+    artifactoryConnection: 'JFrog Artifactory V2'
+    configSource: 'taskConfiguration'
+    taskConfig: |
+      version: 1
+      issues:
+          trackerName: JIRA
+          regexp: (.+-[0-9]+)\s-\s(.+) 
+          keyGroupIndex: 1
+          summaryGroupIndex: 2
+          trackerUrl: http://abc.com
+          aggregate: true
+          aggregationStatus: RELEASED
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+
+- task: JFrogPublishBuildInfo@1
+  inputs:
+    artifactoryConnection: 'JFrog Artifactory V2'
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
