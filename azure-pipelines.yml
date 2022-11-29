@@ -11,21 +11,40 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: CmdLine@2
+- task: JFrogMaven@1
   inputs:
-    script: |
-      wget https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/2.25.5/jfrog-cli-linux-amd64/jf
-      
-      chmod 777 ./jf
-      
-      ./jf c add "art1" --artifactory-url="http://1.117.196.4:8082/artifactory" --interactive=false --user='admin' --password=Password_123 --basic-auth-only
-      
-      ./jf config show
-      
-      ./jf mvnc --server-id-resolve="art1" --repo-resolve-releases="maven-virtual" --repo-resolve-snapshots="maven-virtual" --server-id-deploy="art1" --repo-deploy-releases="maven-dev-local" --repo-deploy-snapshots="maven-dev-local"
-      
-      ./jf mvn install -f pom.xml --build-name="gyzong1.maven-example" --build-number="1"
-      
-      ./jf rt bag "gyzong1.maven-example" "1" --config=jira-issue-new.conf --server-id="art1"
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    artifactoryResolverService: 'JFrog Artifactory V2'
+    targetResolveReleaseRepo: 'maven-virtual'
+    targetResolveSnapshotRepo: 'maven-virtual'
+    artifactoryDeployService: 'JFrog Artifactory V2'
+    targetDeployReleaseRepo: 'maven-dev-local'
+    targetDeploySnapshotRepo: 'maven-dev-local'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    includeEnvVars: true
 
-      ./jf rt bp "gyzong1.maven-example" "1" --env-exclude="*password*;*psw*;*secret*;*key*;*token*;*auth*;" --build-url="https://gyzong1.visualstudio.com/maven-example-new/_build?buildId=74" --server-id="art1"
+- task: JFrogCollectIssues@1
+  inputs:
+    artifactoryConnection: 'JFrog Artifactory V2'
+    configSource: 'taskConfiguration'
+    taskConfig: |
+      version: 1
+      issues:
+          trackerName: JIRA
+          regexp: (.+-[0-9]+)\s-\s(.+) 
+          keyGroupIndex: 1
+          summaryGroupIndex: 2
+          trackerUrl: http://abc.com
+          aggregate: true
+          aggregationStatus: RELEASED
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+
+- task: JFrogPublishBuildInfo@1
+  inputs:
+    artifactoryConnection: 'JFrog Artifactory V2'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
