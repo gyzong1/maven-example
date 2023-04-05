@@ -21,20 +21,21 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean install'
-    artifactoryResolverService: 'JFrog Artifactory V2'
+    artifactoryResolverService: 'art1'
     targetResolveReleaseRepo: 'maven-virtual'
     targetResolveSnapshotRepo: 'maven-virtual'
-    artifactoryDeployService: 'JFrog Artifactory V2'
+    artifactoryDeployService: 'art1'
     targetDeployReleaseRepo: 'maven-dev-local'
     targetDeploySnapshotRepo: 'maven-dev-local'
     collectBuildInfo: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
     includeEnvVars: true
+    javaHomeOption: 'JDKVersion'
 
 - task: JFrogCollectIssues@1
   inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
+    artifactoryConnection: 'art1'
     configSource: 'taskConfiguration'
     taskConfig: |
       version: 1
@@ -51,6 +52,6 @@ steps:
 
 - task: JFrogPublishBuildInfo@1
   inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
+    artifactoryConnection: 'art1'
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
