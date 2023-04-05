@@ -16,6 +16,7 @@ steps:
     script: |
       export JFROG_CLI_LOG_LEVEL="DEBUG"
       git branch -vv
+      git checkout master
 
 - task: JFrogMaven@1
   inputs:
