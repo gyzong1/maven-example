@@ -38,7 +38,7 @@ steps:
 
 - task: JFrogCollectIssues@1
   inputs:
-    artifactoryConnection: 'art1'
+    artifactoryConnection: 'JFrog Artifactory V2'
     configSource: 'taskConfiguration'
     taskConfig: |
       version: 1
@@ -55,6 +55,6 @@ steps:
 
 - task: JFrogPublishBuildInfo@1
   inputs:
-    artifactoryConnection: 'art1'
+    artifactoryConnection: 'JFrog Artifactory V2'
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
