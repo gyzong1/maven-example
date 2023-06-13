@@ -17,15 +17,17 @@ steps:
       export JFROG_CLI_LOG_LEVEL="DEBUG"
       git branch -vv
       git checkout master
+      echo $(test)
 
 - task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean install'
-    artifactoryResolverService: 'art1'
+    options: 'test'
+    artifactoryResolverService: 'JFrog Artifactory V2'
     targetResolveReleaseRepo: 'maven-virtual'
     targetResolveSnapshotRepo: 'maven-virtual'
-    artifactoryDeployService: 'art1'
+    artifactoryDeployService: 'JFrog Artifactory V2'
     targetDeployReleaseRepo: 'maven-dev-local'
     targetDeploySnapshotRepo: 'maven-dev-local'
     collectBuildInfo: true
