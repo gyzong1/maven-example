@@ -15,12 +15,20 @@ on:
     branches: [ "master" ]
 
 jobs:
+
+  # add for jfrog
+  auth:
+    permissions:
+      contents: read
+      id-token: write
+      
   build:
 
     runs-on: ubuntu-latest
 
     steps:
 
+    # add for jfrog
     - name: Get id token
       run: |
         ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
@@ -50,6 +58,7 @@ jobs:
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
 
+    # add for jfrog
     - name: Deploy to artifactory
       env:
         ID_TOKEN: ${{ env.ACCESS_TOKEN }}
