@@ -62,4 +62,4 @@ jobs:
         
       run: |
         ls -l
-        curl -H "Authorization: Bearer $ACCESS_TOKEN" -T oidc-poc "${POC_URL}/artifactory/guoyz-generic-local/oidc-poc-$(date +%Y%m%d%H%M%S)"
+        curl -H "Authorization: Bearer $ACCESS_TOKEN" -T maven.conf "${POC_URL}/artifactory/guoyz-generic-local/oidc-poc-$(date +%Y%m%d%H%M%S)"
