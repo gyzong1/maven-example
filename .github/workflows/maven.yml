@@ -39,9 +39,9 @@ jobs:
 
     - name: Set secret and environment variables
       env:
-        SECRET_VAR: ${{ secrets.ID_TOKEN }}
+        ID_TOKEN: ${{ secrets.ID_TOKEN }}
       run: |
-        echo "The value of SECRET_VAR is $SECRET_VAR"
+        echo "The value of ID_TOKEN is $ID_TOKEN"
 
     - name: Exchange token with access
       env:
