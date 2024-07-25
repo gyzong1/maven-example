@@ -59,7 +59,7 @@ jobs:
       env:
         ID_TOKEN: ${{ env.ACCESS_TOKEN }}
         POC_URL: ${{ vars.POC_URL }}
+        
       run: |
         ls -l
-      run: |
         curl -H "Authorization: Bearer $ACCESS_TOKEN" -T oidc-poc "${POC_URL}/artifactory/guoyz-generic-local/oidc-poc-$(date +%Y%m%d%H%M%S)"
