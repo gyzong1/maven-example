@@ -34,8 +34,14 @@ jobs:
           ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
           "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" | jq .value | tr -d '"')
           echo "ID_TOKEN=${ID_TOKEN}" >> $GITHUB_ENV
-          echo "CUSTOM_VAR: $ID_TOKEN"
-          printenv
+          # echo "CUSTOM_VAR: $ID_TOKEN"
+          # printenv
+
+    - name: Set secret and environment variables
+      env:
+        SECRET_VAR: ${{ secrets.ID_TOKEN }}
+      run: |
+        echo "The value of SECRET_VAR is $SECRET_VAR"
 
     - name: Exchange token with access
       env:
