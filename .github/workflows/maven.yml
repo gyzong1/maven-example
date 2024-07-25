@@ -13,15 +13,11 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
-jobs:
-
-  # add for jfrog
-  auth:
-    permissions:
-      contents: read
-      id-token: write
-      
+    
+permissions:
+  id-token: write
+  
+jobs:   
   build:
 
     runs-on: ubuntu-latest
