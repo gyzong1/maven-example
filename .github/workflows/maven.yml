@@ -62,7 +62,7 @@ jobs:
     - name: Deploy to artifactory
       env:
         ID_TOKEN: ${{ env.ACCESS_TOKEN }}
-        POC_URL: ${{ vars.POC_URL }}
+        # POC_URL: ${{ env.POC_URL }}
         
       run: |
         ls -l
