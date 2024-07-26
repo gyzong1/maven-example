@@ -23,17 +23,22 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      # OIDC_AUDIENCE: 'jfrog-github'
       OIDC_PROVIDER: 'github'
+      OIDC_AUDIENCE: 'jfrog-github'
       POC_URL: 'https://demo.jfrogchina.com'
+      
 
     steps:
 
-    # add for jfrog
+    # add for JFrog
     - name: Get id token
       run: |
           ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-          "${ACTIONS_ID_TOKEN_REQUEST_URL}" | jq .value | tr -d '"')
+          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" | jq .value | tr -d '"')
+          
+          # ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" | jq .value | tr -d '"')
+          
           echo "ID_TOKEN=${ID_TOKEN}" >> $GITHUB_ENV
           # printenv
 
@@ -65,11 +70,13 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
 
-    # add for jfrog
+    ## add for JFrog
     - name: Deploy to artifactory
       env:
         ACCESS_TOKEN: ${{ env.ACCESS_TOKEN }}
-        echo "===ACCESS_TOKEN: ${ACCESS_TOKEN}"
+
+        ## for debug
+        # echo "===ACCESS_TOKEN: ${ACCESS_TOKEN}"
         # ID_TOKEN: ${{ env.ACCESS_TOKEN }}
         # POC_URL: ${{ env.POC_URL }}
         # printenv
