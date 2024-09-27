@@ -47,7 +47,7 @@ steps:
           regexp: (.+-[0-9]+)\s-\s(.+) 
           keyGroupIndex: 1
           summaryGroupIndex: 2
-          trackerUrl: http://abc.com
+          trackerUrl: http://abcd.com
           aggregate: true
           aggregationStatus: RELEASED
     buildName: '$(Build.DefinitionName)'
