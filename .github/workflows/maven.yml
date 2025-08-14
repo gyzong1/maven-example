@@ -76,9 +76,9 @@ jobs:
         ACCESS_TOKEN: ${{ env.ACCESS_TOKEN }}
 
         ## for debug
-        # echo "===ACCESS_TOKEN: ${ACCESS_TOKEN}"
-        # ID_TOKEN: ${{ env.ACCESS_TOKEN }}
-        # POC_URL: ${{ env.POC_URL }}
+        echo "===ACCESS_TOKEN: ${ACCESS_TOKEN}"
+        ID_TOKEN: ${{ env.ACCESS_TOKEN }}
+        POC_URL: ${{ env.POC_URL }}
         # printenv
         
       run: |
