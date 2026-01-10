@@ -22,6 +22,5 @@ steps:
     targetDeploySnapshotRepo: 'maven-dev-local'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.10'
-    jdkArchitectureOption: 'x86'
 
 
