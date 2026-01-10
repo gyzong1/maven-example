@@ -13,19 +13,6 @@ steps:
 - task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'install'
-    artifactoryResolverService: 'art1'
-    targetResolveReleaseRepo: 'maven-virtual'
-    targetResolveSnapshotRepo: 'maven-virtual'
-    artifactoryDeployService: 'art1'
-    targetDeployReleaseRepo: 'maven-dev-local'
-    targetDeploySnapshotRepo: 'maven-dev-local'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-
-- task: JFrogMaven@1
-  inputs:
-    mavenPomFile: 'pom.xml'
     goals: 'package'
     artifactoryResolverService: 'art1'
     targetResolveReleaseRepo: 'maven-virtual'
@@ -35,3 +22,4 @@ steps:
     targetDeploySnapshotRepo: 'maven-dev-local'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
+
