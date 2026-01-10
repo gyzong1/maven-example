@@ -10,27 +10,17 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-# - task: JFrogMaven@1
-#   inputs:
-#     mavenPomFile: 'pom.xml'
-#     goals: 'install'
-#     artifactoryResolverService: 'art1'
-#     targetResolveReleaseRepo: 'maven-virtual'
-#     targetResolveSnapshotRepo: 'maven-virtual'
-#     artifactoryDeployService: 'art1'
-#     targetDeployReleaseRepo: 'maven-dev-local'
-#     targetDeploySnapshotRepo: 'maven-dev-local'
-#     javaHomeOption: 'JDKVersion'
-#     jdkVersionOption: '1.11'
-
-
-- task: Maven@4
+- task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean install'
-    publishJUnitResults: false
+    goals: 'install -X'
+    artifactoryResolverService: 'art1'
+    targetResolveReleaseRepo: 'maven-virtual'
+    targetResolveSnapshotRepo: 'maven-virtual'
+    artifactoryDeployService: 'art1'
+    targetDeployReleaseRepo: 'maven-dev-local'
+    targetDeploySnapshotRepo: 'maven-dev-local'
     javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    jdkVersionOption: '1.11'
+
+
