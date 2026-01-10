@@ -16,7 +16,6 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      bash: |
         set -o errexit
         set -o nounset
         set -o pipefail
@@ -24,7 +23,6 @@ steps:
             --silent https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz |
             tar --extract --gzip --directory=/opt
         echo "##vso[task.prependpath]/opt/apache-maven-3.9.11/bin"
-      displayName: Downgrade Maven to 3.9.11
 
 - task: JFrogMaven@1
   inputs:
