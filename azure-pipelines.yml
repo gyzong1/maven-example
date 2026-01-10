@@ -36,25 +36,30 @@ steps:
     includeEnvVars: true
     javaHomeOption: 'JDKVersion'
 
-- task: JFrogCollectIssues@1
+# - task: JFrogCollectIssues@1
+#   inputs:
+#     artifactoryConnection: 'JFrog Artifactory V2'
+#     configSource: 'taskConfiguration'
+#     taskConfig: |
+#       version: 1
+#       issues:
+#           trackerName: JIRA
+#           regexp: (.+-[0-9]+)\s-\s(.+) 
+#           keyGroupIndex: 1
+#           summaryGroupIndex: 2
+#           trackerUrl: http://abc.com
+#           aggregate: true
+#           aggregationStatus: RELEASED
+#     buildName: '$(Build.DefinitionName)'
+#     buildNumber: '$(Build.BuildNumber)'
+- task: JFrogMaven@1
   inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
-    configSource: 'taskConfiguration'
-    taskConfig: |
-      version: 1
-      issues:
-          trackerName: JIRA
-          regexp: (.+-[0-9]+)\s-\s(.+) 
-          keyGroupIndex: 1
-          summaryGroupIndex: 2
-          trackerUrl: http://abc.com
-          aggregate: true
-          aggregationStatus: RELEASED
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-
-- task: JFrogPublishBuildInfo@1
-  inputs:
-    artifactoryConnection: 'JFrog Artifactory V2'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    artifactoryResolverService: 'art1'
+    targetResolveReleaseRepo: 'maven-virtual'
+    targetResolveSnapshotRepo: 'maven-virtual'
+    artifactoryDeployService: 'art1'
+    targetDeployReleaseRepo: 'maven-dev-local'
+    targetDeploySnapshotRepo: 'maven-dev-local'
+    javaHomeOption: 'JDKVersion'
