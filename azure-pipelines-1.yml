@@ -13,7 +13,7 @@ steps:
 - task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'package'
+    goals: 'install'
     artifactoryResolverService: 'art1'
     targetResolveReleaseRepo: 'maven-virtual'
     targetResolveSnapshotRepo: 'maven-virtual'
