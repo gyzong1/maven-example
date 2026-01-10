@@ -9,7 +9,23 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+
 steps:
+
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      bash: |
+        set -o errexit
+        set -o nounset
+        set -o pipefail
+        curl --fail --location --show-error \
+            --silent https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz |
+            tar --extract --gzip --directory=/opt
+        echo "##vso[task.prependpath]/opt/apache-maven-3.9.11/bin"
+      displayName: Downgrade Maven to 3.9.11
+
 - task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
