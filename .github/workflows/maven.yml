@@ -23,9 +23,9 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      OIDC_PROVIDER: 'github'
-      OIDC_AUDIENCE: 'jfrog-github'
-      POC_URL: 'https://artifactory.com.cn'
+      OIDC_PROVIDER: 'guoyz-github'
+      OIDC_AUDIENCE: 'guoyz-github'
+      POC_URL: 'https://demo.jfrogchina.com'
       
 
     steps:
@@ -34,7 +34,7 @@ jobs:
     - name: Get id token
       run: |
           ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" | jq .value | tr -d '"')
+          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=guoyz-github" | jq .value | tr -d '"')
           
           # ID_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
           # "${ACTIONS_ID_TOKEN_REQUEST_URL}" | jq .value | tr -d '"')
@@ -45,7 +45,7 @@ jobs:
     - name: Exchange token with access
       env:
           ID_TOKEN: ${{env.ID_TOKEN}}
-          JFROG_PLATFORM_URL: https://artifactory.com.cn/artifactory/api/oauth2/loginResponse
+          JFROG_PLATFORM_URL: https://demo.jfrogchina.com/artifactory/api/oauth2/loginResponse
       run: |
           ACCESS_TOKEN=$(curl -XPOST -H "Content-Type: application/json" "https://artifactory.com.cn/access/api/v1/oidc/token" -d "{\"grant_type\": \"urn:ietf:params:oauth:grant-type:token-exchange\", \"subject_token_type\":\"urn:ietf:params:oauth:token-type:id_token\", \"subject_token\": \"${ID_TOKEN}\", \"provider_name\": \"github\"}" | jq .access_token | tr -d '"')
           echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
