@@ -28,6 +28,7 @@ jobs:
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://demo.jfrogchina.com
+          JF_PROJECT: "guoyz-project"
         with:
           oidc-provider-name: guoyz-github
           oidc-audience: guoyz-github
