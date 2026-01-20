@@ -34,3 +34,8 @@ jobs:
 
       - name: Test JFrog CLI connectivity
         run: jf rt ping
+
+      - name: download test
+        run: |
+          ls
+          jf rt dl guoyz-project-generic-local/1.txt --flat=true
