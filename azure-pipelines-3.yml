@@ -40,8 +40,19 @@ steps:
   inputs:
     command: 'Pull'
     artifactoryConnection: 'art1'
-    imageName: 'artifactory.com.cn/docker-remote/busybox'
+    imageName: 'artifactory.com.cn/docker-local/busybox'
     collectBuildInfo: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
+    skipLogin: false
+
+- task: JFrogDocker@1
+  inputs:
+    command: 'Push'
+    artifactoryConnection: 'art1'
+    imageName: 'artifactory.com.cn/docker-local/test:v1'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    threads: '3'
     skipLogin: false
