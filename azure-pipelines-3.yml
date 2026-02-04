@@ -40,7 +40,7 @@ steps:
   inputs:
     command: 'Pull'
     artifactoryConnection: 'art1'
-    imageName: 'artifactory.com.cn/docker-local/busybox'
+    imageName: 'artifactory.com.cn/docker-local/test:v1'
     collectBuildInfo: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
