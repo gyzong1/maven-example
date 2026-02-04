@@ -21,18 +21,18 @@ steps:
             tar --extract --gzip --directory=/opt
         echo "##vso[task.prependpath]/opt/apache-maven-3.9.11/bin"
         
-
-- task: Maven@3
+        
+- task: JFrogMaven@1
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
+    goals: 'clean install'
+    artifactoryResolverService: 'art1'
+    targetResolveReleaseRepo: 'maven-virtual'
+    targetResolveSnapshotRepo: 'maven-virtual'
+    artifactoryDeployService: 'art1'
+    targetDeployReleaseRepo: 'maven-dev-local'
+    targetDeploySnapshotRepo: 'maven-dev-local'
     javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
-
 
 
 - task: JFrogDocker@1
