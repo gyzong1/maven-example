@@ -1,11 +1,28 @@
 name: "Frogbot Security Scan"
 
+# on:
+#   pull_request_target: 
+#     types: [opened, synchronize] # Triggers scan-pr flow for every opened/updated pull request
+#   push: # Triggers scan-repo flow for every push to the specified branches
+#     branches:
+#       # - dependabot/maven/junit-junit-4.13.1
+#       - master
+#   schedule:
+#     - cron: "0 0 * * *"   # The repository will be scanned once a day at 00:00 GMT.
+#   workflow_dispatch: # The repository will be scanned on demand
+
+# permissions:
+#   pull-requests: write
+#   contents: write
+#   security-events: write
+#   # [Mandatory If using OIDC authentication protocol instead of JF_ACCESS_TOKEN]
+#   # id-token: write
+
 on:
   pull_request_target: 
     types: [opened, synchronize] # Triggers scan-pr flow for every opened/updated pull request
   push: # Triggers scan-repo flow for every push to the specified branches
     branches:
-      # - dependabot/maven/junit-junit-4.13.1
       - master
   schedule:
     - cron: "0 0 * * *"   # The repository will be scanned once a day at 00:00 GMT.
@@ -15,8 +32,6 @@ permissions:
   pull-requests: write
   contents: write
   security-events: write
-  # [Mandatory If using OIDC authentication protocol instead of JF_ACCESS_TOKEN]
-  # id-token: write
 
 jobs:
   frogbot-scan:
