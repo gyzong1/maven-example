@@ -1,0 +1,87 @@
+# GitHub Actions + JFrog CLI — Maven 构建 / 上传 / Build Info / Xray 扫描
+# 仓库: https://github.com/gyzong1/maven-example
+#
+# 仓库 Secrets / Variables:
+#   vars.JF_URL              JFrog Platform URL，如 https://xxx.com
+#   secrets.JF_ACCESS_TOKEN  具备 Deploy / Build Info / Xray Scan 权限的 Access Token
+#
+# Artifactory 仓库名可按环境修改；默认与仓库内 maven.conf 一致（guoyz-github-maven-virtual）
+
+name: Maven Build & Publish to Artifactory
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+env:
+  # 与 jfrog/setup-jfrog-cli 默认一致；扫描 / 发布时显式传入更清晰
+  JFROG_CLI_BUILD_NAME: guoyz-github-maven-example
+  JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
+  # 解析 / 部署仓库（对应项目 maven.conf）
+  MAVEN_REPO_RESOLVE: guoyz-github-maven-virtual
+  MAVEN_REPO_DEPLOY: guoyz-github-maven-virtual
+
+jobs:
+  build-publish-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          java-version: "8"
+          distribution: temurin
+          cache: maven
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          # 由本 workflow 显式执行 bce / bag / bp，关闭 action 自动发布，避免重复 Build Info
+          disable-auto-build-publish: true
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Ping Artifactory
+        run: jf rt ping
+
+      # 1) 配置 Maven 解析 / 部署仓库（也可直接复用仓库根目录已有的 maven.conf）
+      - name: Configure Maven repositories
+        run: |
+          jf mvn-config \
+            --repo-resolve-releases="${MAVEN_REPO_RESOLVE}" \
+            --repo-resolve-snapshots="${MAVEN_REPO_RESOLVE}" \
+            --repo-deploy-releases="${MAVEN_REPO_DEPLOY}" \
+            --repo-deploy-snapshots="${MAVEN_REPO_DEPLOY}"
+
+      # 2) 构建并上传产物到 Artifactory，同时本地搜集 Build Info
+      #    使用 deploy（不要只用 install），才会推送到远端仓库
+      - name: Build and deploy to Artifactory
+        run: |
+          jf mvn clean deploy \
+            --build-name="${JFROG_CLI_BUILD_NAME}" \
+            --build-number="${JFROG_CLI_BUILD_NUMBER}" \
+            -DskipTests
+
+      # 3) 搜集并发布 Build Info（环境变量 + Git VCS + 发布到 Artifactory）
+      - name: Collect and publish build info
+        run: |
+          jf rt build-collect-env \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+          jf rt build-add-git \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+          jf rt build-publish \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+
+      # 4) 使用 Xray 扫描已发布的 Build
+      - name: Scan build with Xray
+        run: |
+          jf build-scan \
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
