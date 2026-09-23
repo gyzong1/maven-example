@@ -20,7 +20,7 @@ name: "Frogbot Security Scan"
 
 on:
   pull_request_target: 
-    types: [opened, synchronize] # Triggers scan-pr flow for every opened/updated pull request
+    # types: [opened, synchronize] # Triggers scan-pr flow for every opened/updated pull request
   push: # Triggers scan-repo flow for every push to the specified branches
     branches:
       - master
