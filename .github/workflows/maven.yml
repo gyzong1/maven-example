@@ -5,7 +5,7 @@
 #   vars.JF_URL              JFrog Platform URL，如 https://xxx.com
 #   secrets.JF_ACCESS_TOKEN  具备 Deploy / Build Info / Xray Scan 权限的 Access Token
 #
-# Artifactory 仓库名可按环境修改；默认与仓库内 maven.conf 一致（guoyz-github-maven-virtual）
+# Artifactory 仓库名可按环境修改；默认与仓库内 maven.conf 一致（guoyz-github-maven-virtual） 
 
 name: Maven Build & Publish to Artifactory
 
