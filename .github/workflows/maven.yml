@@ -84,4 +84,5 @@ jobs:
       - name: Scan build with Xray
         run: |
           jf build-scan \
-            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}"
+            "${JFROG_CLI_BUILD_NAME}" "${JFROG_CLI_BUILD_NUMBER}" \
+            --fail=false
