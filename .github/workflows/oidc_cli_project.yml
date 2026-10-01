@@ -55,8 +55,8 @@ jobs:
           JF_URL: https://demo.jfrogchina.com
           JF_PROJECT: "guoyz-project2"
         with:
-          oidc-provider-name: guoyz-test
-          oidc-audience: guoyz-test
+          oidc-provider-name: guoyz-project2
+          oidc-audience: guoyz-project2
 
       - name: Debug OIDC token (masked by GHA) 2
         run: |
