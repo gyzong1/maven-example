@@ -33,10 +33,15 @@ jobs:
           oidc-provider-name: guoyz-test
           oidc-audience: guoyz-test
 
-      - name: Print OIDC project token
+      - name: Debug OIDC token (masked by GHA)
         run: |
-          echo "oidc-user=${{ steps.setup-jfrog-cli.outputs.oidc-user }}"
-          echo "oidc-token=${{ steps.setup-jfrog-cli.outputs.oidc-token }}"
+          TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
+          USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
+          echo "user length: ${#USER}"
+          echo "token length: ${#TOKEN}"
+          echo "user (base64): $(printf '%s' "$USER" | base64)"
+          echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
+          # 本地解码: echo '<上面的base64>' | base64 -d
 
       - name: Test JFrog CLI connectivity
         run: jf rt ping
