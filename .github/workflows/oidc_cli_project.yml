@@ -1,39 +1,40 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
+#
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation. 
+# separate terms of service, privacy policy, and support documentation.
 
 name: Java CI with Maven
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   # pull_request:
-  #  branches: [ "master" ]
-    
+  #   branches: ["master"]
+
 permissions:
   contents: read
   id-token: write
-  
-jobs:  
-  oidc-test: 
+
+jobs:
+  oidc-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      # ---- Project 1: guoyz-project ----
       - name: Setup JFrog CLI
         id: setup-jfrog-cli
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://demo.jfrogchina.com
-          JF_PROJECT: "guoyz-project"
+          JF_PROJECT: guoyz-project
         with:
           oidc-provider-name: guoyz-test
           oidc-audience: guoyz-test
 
-      - name: Debug OIDC token (masked by GHA)
+      - name: Debug OIDC token (project1)
         run: |
           TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
           USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
@@ -41,37 +42,38 @@ jobs:
           echo "token length: ${#TOKEN}"
           echo "user (base64): $(printf '%s' "$USER" | base64)"
           echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
-          # 本地解码: echo '<上面的base64>' | base64 -d
 
-      - name: clean second env
+      - name: Test JFrog CLI connectivity (project1)
+        run: jf rt ping
+
+      - name: Download test (project1)
         run: |
-         jf c remove --quiet
+          ls
+          jf rt dl guoyz-project-generic-local/1.txt --flat=true
 
-      - uses: actions/checkout@v3
+      - name: Clear JFrog CLI config
+        run: jf c remove --quiet
+
+      # ---- Project 2: guoyz-project2 ----
+      # 需在 JFrog 上已配置同名 OIDC Provider / Audience / Identity Mapping
       - name: Setup JFrog CLI2
         id: setup-jfrog-cli-2
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://demo.jfrogchina.com
-          JF_PROJECT: "guoyz-project2"
+          JF_PROJECT: guoyz-project2
         with:
           oidc-provider-name: guoyz-project2
           oidc-audience: guoyz-project2
 
-      - name: Debug OIDC token (masked by GHA) 2
+      - name: Debug OIDC token (project2)
         run: |
-          TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
-          USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
+          TOKEN='${{ steps.setup-jfrog-cli-2.outputs.oidc-token }}'
+          USER='${{ steps.setup-jfrog-cli-2.outputs.oidc-user }}'
           echo "user length: ${#USER}"
           echo "token length: ${#TOKEN}"
           echo "user (base64): $(printf '%s' "$USER" | base64)"
           echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
-          # 本地解码: echo '<上面的base64>' | base64 -d
 
-      - name: Test JFrog CLI connectivity
+      - name: Test JFrog CLI connectivity (project2)
         run: jf rt ping
-
-      - name: Download test
-        run: |
-          ls
-          jf rt dl guoyz-project-generic-local/1.txt --flat=true
