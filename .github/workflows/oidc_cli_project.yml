@@ -43,6 +43,31 @@ jobs:
           echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
           # 本地解码: echo '<上面的base64>' | base64 -d
 
+      - name: clean second env
+        run: |
+         jf c remove --quiet
+
+      - uses: actions/checkout@v3
+      - name: Setup JFrog CLI2
+        id: setup-jfrog-cli
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: https://demo.jfrogchina.com
+          JF_PROJECT: "guoyz-project2"
+        with:
+          oidc-provider-name: guoyz-test
+          oidc-audience: guoyz-test
+
+      - name: Debug OIDC token (masked by GHA) 2
+        run: |
+          TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
+          USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
+          echo "user length: ${#USER}"
+          echo "token length: ${#TOKEN}"
+          echo "user (base64): $(printf '%s' "$USER" | base64)"
+          echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
+          # 本地解码: echo '<上面的base64>' | base64 -d
+
       - name: Test JFrog CLI connectivity
         run: jf rt ping
 
