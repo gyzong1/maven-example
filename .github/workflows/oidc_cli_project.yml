@@ -23,13 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ---- Project 1: guoyz-project ----
+      # ---- Project 1 ----
       - name: Setup JFrog CLI (project1)
         id: setup-jfrog-cli
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://demo.jfrogchina.com
           JF_PROJECT: guoyz-project
+          JFROG_CLI_BUILD_PROJECT: guoyz-project
         with:
           oidc-provider-name: guoyz-test
           oidc-audience: guoyz-test
@@ -51,14 +52,21 @@ jobs:
           ls
           jf rt dl guoyz-project-generic-local/1.txt --flat=true
 
-      # ---- Project 2: guoyz-project2 ----
-      # 注意：中间不要 jf c remove；用不同 custom-server-id 避免互相覆盖
+      # 清掉第一次写入 GITHUB_ENV 的项目上下文，避免污染第二次 OIDC
+      - name: Reset project env before project2
+        run: |
+          echo "JFROG_CLI_BUILD_PROJECT=guoyz-project2" >> "$GITHUB_ENV"
+          echo "JF_PROJECT=guoyz-project2" >> "$GITHUB_ENV"
+
+      # ---- Project 2 ----
       - name: Setup JFrog CLI (project2)
         id: setup-jfrog-cli-2
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://demo.jfrogchina.com
           JF_PROJECT: guoyz-project2
+          # 必须显式覆盖，否则会沿用第一次的 guoyz-project
+          JFROG_CLI_BUILD_PROJECT: guoyz-project2
         with:
           oidc-provider-name: guoyz-project2
           oidc-audience: guoyz-project2
