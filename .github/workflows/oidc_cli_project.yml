@@ -33,10 +33,15 @@ jobs:
           oidc-provider-name: guoyz-test
           oidc-audience: guoyz-test
 
+      - name: Print OIDC project token
+        run: |
+          echo "oidc-user=${{ steps.setup-jfrog-cli.outputs.oidc-user }}"
+          echo "oidc-token=${{ steps.setup-jfrog-cli.outputs.oidc-token }}"
+
       - name: Test JFrog CLI connectivity
         run: jf rt ping
 
-      - name: download test
+      - name: Download test
         run: |
           ls
           jf rt dl guoyz-project-generic-local/1.txt --flat=true
