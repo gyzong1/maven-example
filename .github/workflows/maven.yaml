@@ -23,8 +23,8 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      OIDC_PROVIDER: 'guoyz-github'
-      OIDC_AUDIENCE: 'guoyz-github'
+      OIDC_PROVIDER: 'guoyz-test'
+      OIDC_AUDIENCE: 'guoyz-test'
       POC_URL: 'https://demo.jfrogchina.com'
       
 
