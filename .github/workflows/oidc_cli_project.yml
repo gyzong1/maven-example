@@ -23,36 +23,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ---- Project 1: guoyz-project ----
-      - name: Setup JFrog CLI
-        id: setup-jfrog-cli
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: https://demo.jfrogchina.com
-          JF_PROJECT: guoyz-project
-        with:
-          oidc-provider-name: guoyz-test
-          oidc-audience: guoyz-test
+      # # ---- Project 1: guoyz-project ----
+      # - name: Setup JFrog CLI
+      #   id: setup-jfrog-cli
+      #   uses: jfrog/setup-jfrog-cli@v4
+      #   env:
+      #     JF_URL: https://demo.jfrogchina.com
+      #     JF_PROJECT: guoyz-project
+      #   with:
+      #     oidc-provider-name: guoyz-test
+      #     oidc-audience: guoyz-test
 
-      - name: Debug OIDC token (project1)
-        run: |
-          TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
-          USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
-          echo "user length: ${#USER}"
-          echo "token length: ${#TOKEN}"
-          echo "user (base64): $(printf '%s' "$USER" | base64)"
-          echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
+      # - name: Debug OIDC token (project1)
+      #   run: |
+      #     TOKEN='${{ steps.setup-jfrog-cli.outputs.oidc-token }}'
+      #     USER='${{ steps.setup-jfrog-cli.outputs.oidc-user }}'
+      #     echo "user length: ${#USER}"
+      #     echo "token length: ${#TOKEN}"
+      #     echo "user (base64): $(printf '%s' "$USER" | base64)"
+      #     echo "token (base64): $(printf '%s' "$TOKEN" | base64)"
 
-      - name: Test JFrog CLI connectivity (project1)
-        run: jf rt ping
+      # - name: Test JFrog CLI connectivity (project1)
+      #   run: jf rt ping
 
-      - name: Download test (project1)
-        run: |
-          ls
-          jf rt dl guoyz-project-generic-local/1.txt --flat=true
+      # - name: Download test (project1)
+      #   run: |
+      #     ls
+      #     jf rt dl guoyz-project-generic-local/1.txt --flat=true
 
-      - name: Clear JFrog CLI config
-        run: jf c remove --quiet
+      # - name: Clear JFrog CLI config
+      #   run: jf c remove --quiet
 
       # ---- Project 2: guoyz-project2 ----
       # 需在 JFrog 上已配置同名 OIDC Provider / Audience / Identity Mapping
